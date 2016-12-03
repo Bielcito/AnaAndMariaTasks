@@ -1,3 +1,3 @@
 package main
 
-var DEBUGMODE = true
+var DEBUGMODE = false

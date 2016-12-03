@@ -10,6 +10,7 @@ type Task struct
 	concludeOnAccess bool
 	deleteOnAccess bool
 	accessEverything bool
+	completed []*Person
 }
 
 // Deleta um objeto da lista de objetos

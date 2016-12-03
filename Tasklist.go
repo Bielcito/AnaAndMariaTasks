@@ -18,9 +18,7 @@ func (tl *TaskList) append (t Task) {
 }
 
 func (tl *TaskList) Lock () {
-	if(DEBUGMODE) {
-		tl.mutex.Lock()
-	}
+	tl.mutex.Lock()
 }
 
 func (tl *TaskList) Unlock () {

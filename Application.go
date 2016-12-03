@@ -1,6 +1,7 @@
 package main
 
 import "sync"
+import "fmt"
 
 type Application struct {
 	tl TaskList // Lista de Tasks
@@ -41,7 +42,7 @@ func (a *Application) initializeTaskList () {
 				{name: "Janela"},
 				{name: "Janela"},
 			},
-			accessEverything: true,
+			deleteOnAccess: true,
 		},
 	)
 	a.tl.append(
@@ -53,7 +54,7 @@ func (a *Application) initializeTaskList () {
 				{name: "Porta"},
 				{name: "Porta"},
 			},
-			accessEverything: true,
+			deleteOnAccess: true,
 		},
 	)
 	a.tl.append(
@@ -62,7 +63,7 @@ func (a *Application) initializeTaskList () {
 			objects: []Object{
 				{name: "Chaves"},
 			},
-			concludeOnAccess: true,
+			deleteOnAccess: true,
 		},
 	)
 }
@@ -72,14 +73,31 @@ func (a *Application) initializePersons () {
 	a.persons = append(a.persons, Person{name: "Maria"})
 }
 
-func (a *Application) run () {
+func (a *Application) runTaskList () {
 
 	var wg sync.WaitGroup
 
 	for i := 0; i < len(a.persons); i++ {
 		wg.Add(1)
-		go a.persons[i].run(&a.tl, &wg)
+		go a.persons[i].runTaskList(&a.tl, &wg)
 	}
 
 	wg.Wait()
+}
+
+func (a *Application) runAlarm () {
+	alarm := Alarm{turnedOn: false}
+
+	var wg, wg2 sync.WaitGroup
+
+	for i := 0; i < len(a.persons); i++ {
+		wg.Add(1)
+		go a.persons[i].runAlarm(&alarm, &wg, &wg2)
+	}
+
+	wg.Wait()
+
+	fmt.Print("Ana e Maria saíram e trancaram a porta\n")
+
+	wg2.Wait()
 }
